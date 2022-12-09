@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Envoi de la localisation</title>
+  </head>
+  <body>
+    <h1>Ma localisation</h1>
+    <p id="location"></p>
+
+    <script>
+      // Fonction qui est appelée lorsque la localisation est réussie
+      function onSuccess(position) {
+        // Récupération des coordonnées de la localisation
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        // Affichage de la localisation sur la page
+        var locationElement = document.getElementById('location');
+        locationElement.innerHTML = 'Latitude : ' + latitude + '<br>Longitude : ' + longitude;
+
+        // Envoi des coordonnées à un site web via des variables
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', 'https://wildcats.eu.jeedom.link/core/api/jeeApi.php?plugin=virtual&type=event&apikey=dANMgqM8ln1uCmqFDVOj5Twh6XfaPv5G&id=5240&value='+ position.coords.latitude, true);
+	httpRequest .send();
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', 'https://wildcats.eu.jeedom.link/core/api/jeeApi.php?plugin=virtual&type=event&apikey=dANMgqM8ln1uCmqFDVOj5Twh6XfaPv5G&id=5241&value='+ position.coords.longitude, true);
+	httpRequest .send();
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', 'https://wildcats.eu.jeedom.link/core/api/jeeApi.php?plugin=virtual&type=event&apikey=dANMgqM8ln1uCmqFDVOj5Twh6XfaPv5G&id=5242&value=0', true);
+	httpRequest .send();
+      }
+
+      // Fonction qui est appelée lorsque la géolocalisation échoue
+      function onError(error) {
+        // Affichage d'un message d'erreur
+        var locationElement = document.getElementById('location');
+        locationElement.innerHTML = 'Impossible de récupérer votre localisation';
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', 'https://wildcats.eu.jeedom.link/core/api/jeeApi.php?plugin=virtual&type=event&apikey=dANMgqM8ln1uCmqFDVOj5Twh6XfaPv5G&id=5242&value=Impossible', true);
+        httpRequest .send();
+      }
+
+      // Demande de la localisation à l'utilisateur
+      navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    </script>
+  </body>
+</html>
